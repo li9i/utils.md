@@ -97,6 +97,8 @@ Table of Contents
   - [Squash commits during rebase](git.md#squash-commits-during-rebase)
   - [Squash local commits before pushing](git.md#squash-local-commits-before-pushing)
   - [Squash one branch to a single commit---then place it in a branch](git.md#squash-one-branch-to-a-single-commit-then-place-it-in-a-branch)
+- `stash`
+  - [Stash subset of staged files](git.md#stash-subset-of-staged-files)
 - `worktree`
   - [What's a typical workflow?](git.md#worktrees)
 

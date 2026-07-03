@@ -541,6 +541,12 @@ git checkout master
 git merge --ff-only `my-branch`
 ```
 
+## Stash subset of staged files
+
+```bash
+git stash push path/to/file1 path/to/file2
+```
+
 ---
 
 # T
