@@ -554,6 +554,53 @@ git checkout master
 git merge --ff-only `my-branch`
 ```
 
+## Stacked branches/PRs workflow
+
+> Let's say we have some stacked branches. Let's say that we need to make a change to the first one, how do we propagate it to every other branch?
+
+Propagating a change down the stack just means rebasing the upper branches onto the new tip of the lower one. The thing that makes this painless is `--update-refs`, which moves all the intermediate branch pointers for you in a single rebase instead of you rebasing each branch by hand.
+
+Say your stack is:
+
+```
+main → A (feature-a) → B (feature-b) → C (feature-c)
+```
+
+### If it's a new commit rather than an amend
+
+Add it and rebase
+
+```bash
+git checkout feature-a
+
+# make your change
+git add -A && git commit -m "handle empty-input case"
+
+git checkout feature-c
+
+git rebase --update-refs feature-a
+```
+
+Now `feature-b` and `feature-c` are replayed on top of `feature-a`'s new tip, and `--update-refs` moves the intermediate pointers.
+
+### If you're editing a commit that already exists in `feature-a`
+
+Do an interactive rebase from the base while sitting on the top branch:
+
+```bash
+git checkout feature-c  # top of the stack
+
+git rebase -i --update-refs main
+```
+
+The todo list will show every commit from `main` up to `feature-c`, with `update-ref refs/heads/feature-a` and `update-ref refs/heads/feature-b` lines interspersed at the right spots. Mark the commit you want to change as `edit`, make your change, `git commit --amend`, then `git rebase --continue`. When it finishes, all three branch refs point where they should — the change is baked into `feature-a` and `feature-b`/`feature-c` are replayed on top of it.
+
+Finally, since you've rewritten history on every branch, push the whole stack with lease protection:
+
+```bash
+git push --force-with-lease origin feature-a feature-b feature-c
+```
+
 ## Stash subset of staged files
 
 ```bash

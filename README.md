@@ -58,6 +58,9 @@ Table of Contents
 - [Remove changes introduced by commit](git.md#remove-changes-introduced-by-commit)
 - [Resolve conflicts after merge](git.md#resolve-conflicts-after-merge)
 - [Revert multiple commits in one new commit](git.md#revert-multiple-commits-in-one-commit)
+- [Stacked branches/PRs workflow](git.md#stacked-branchesprs-workflow)
+  - [If it's a new commit rather than an amend](git.md#if-its-a-new-commit-rather-than-an-amend)
+  - [If you're editing a commit that already exists in `feature-a`](git.md#if-youre-editing-a-commit-that-already-exists-in-feature-a)
 - [View file modifications](git.md#view-file-modifications)
 - [View ignored files](git.md#view-ignored-files)
 - `add`
