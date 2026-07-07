@@ -57,7 +57,6 @@ Table of Contents
 - [List files modified or yet untracked](git.md#list-files-modified-or-yet-untracked)
 - [Remove changes introduced by commit](git.md#remove-changes-introduced-by-commit)
 - [Resolve conflicts after merge](git.md#resolve-conflicts-after-merge)
-- [Restore file to past state using commit hash](git.md#restore-file-to-past-state-using-commit-hash)
 - [Revert multiple commits in one new commit](git.md#revert-multiple-commits-in-one-commit)
 - [View file modifications](git.md#view-file-modifications)
 - [View ignored files](git.md#view-ignored-files)
@@ -65,6 +64,9 @@ Table of Contents
   - [Add everything except untracked files](git.md#add-everything-except-untracked-files)
   - [Forgot to add file(s) to latest commit and realised before pushing?](git.md#forgot-to-add-files-to-latest-commit-and-realised-before-pushing)
   - [Unstage everything after `add`](git.md#unstage-everything-after-add)
+- `checkout`
+  - [Checkout file as means of cherry-picking it from another branch](git.md#checkout-file-as-means-cherry-picking-it-from-another-branch)
+  - [Checkout file as means of restoring it to past state using commit hash](git.md#checkout-file-as-means-of-restorit-it-to-past-state-using-commit-hash)
 - `cherry-pick`
   - [The two branches are in the same repository](git.md#the-two-branches-are-in-the-same-repository)
   - [The two branches are NOT in the same repository](git.md#the-two-branches-are-NOT-in-the-same-repository)

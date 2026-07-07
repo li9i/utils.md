@@ -12,6 +12,25 @@ git add -u # --update
 
 # C
 
+## Checkout file as means of cherry-picking it from another branch
+
+The following copies a file that originally resides to branch `master` to the `my-branch` branch.
+
+```bash
+# git checkout master  # on branch master
+git checkout -b my-branch
+git checkout master -- <filename>
+```
+
+## Checkout file as means of restoring it to past state using commit hash
+
+```bash
+git checkout <commit-hash> -- <filename>
+```
+
+> [!NOTE]
+> If you don't supply `commit-hash` then the file is restored to its last committed state.
+
 ## Configuration of keys for different repos
 
 ```bash
@@ -371,12 +390,6 @@ Meld will open with three panes: your branch's version on the left, the other br
 ```bash
 git add <conflicted-file>   # usually automatic after mergetool, but check git status
 git commit
-```
-
-## Restore file to past state using commit hash
-
-```bash
-git checkout <commit-hash> -- <filename>
 ```
 
 ## Revert multiple commits in one commit
