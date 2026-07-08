@@ -68,8 +68,8 @@ Table of Contents
   - [Forgot to add file(s) to latest commit and realised before pushing?](git.md#forgot-to-add-files-to-latest-commit-and-realised-before-pushing)
   - [Unstage everything after `add`](git.md#unstage-everything-after-add)
 - `checkout`
-  - [Checkout file as means of cherry-picking it from another branch](git.md#checkout-file-as-means-cherry-picking-it-from-another-branch)
-  - [Checkout file as means of restoring it to past state using commit hash](git.md#checkout-file-as-means-of-restorit-it-to-past-state-using-commit-hash)
+  - [Checkout as means of cherry-picking file from another branch](git.md#checkout-as-means-of-cherry-picking-file-from-another-branch)
+  - [Checkout as means of restoring file to past state using commit hash](git.md#checkout-as-means-of-restoring-file-to-past-state-using-commit-hash)
 - `cherry-pick`
   - [The two branches are in the same repository](git.md#the-two-branches-are-in-the-same-repository)
   - [The two branches are NOT in the same repository](git.md#the-two-branches-are-NOT-in-the-same-repository)

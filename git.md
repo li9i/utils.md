@@ -12,7 +12,7 @@ git add -u # --update
 
 # C
 
-## Checkout file as means of cherry-picking it from another branch
+## Checkout as means of cherry-picking file from another branch
 
 The following copies a file that originally resides to branch `master` to the `my-branch` branch.
 
@@ -22,7 +22,7 @@ git checkout -b my-branch
 git checkout master -- <filename>
 ```
 
-## Checkout file as means of restoring it to past state using commit hash
+## Checkout as means of restoring file to past state using commit hash
 
 ```bash
 git checkout <commit-hash> -- <filename>
