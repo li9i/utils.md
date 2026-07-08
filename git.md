@@ -601,6 +601,40 @@ Finally, since you've rewritten history on every branch, push the whole stack wi
 git push --force-with-lease origin feature-a feature-b feature-c
 ```
 
+### Stacked PRs Workflow
+
+Stacked PRs are for breaking one large change into a sequence of smaller, individually reviewable pieces where each piece depends on the one before it. The defining characteristic is that the branches are based on one another in a cascade, not each targeting main independently.
+
+So the structure looks like:
+
+```
+main
+ └─ feature-1          PR #1: feature-1 → main
+     └─ feature-2      PR #2: feature-2 → feature-1
+         └─ feature-3  PR #3: feature-3 → feature-2
+```
+
+The reason each PR targets its *parent* branch rather than `main` is the diff. If PR #2 targeted `main` directly, GitHub would show it containing all of PR #1's changes too, so the reviewer couldn't tell what's actually new in #2. By targeting the parent, each PR's diff shows only its own incremental changes, which is the whole point of stacking.
+
+On review: the PRs can be reviewed in parallel, since a reviewer can read each incremental diff independently. But they must *merge* bottom-up — you can't merge #2 before #1, because #2's base branch doesn't exist in `main` yet.
+
+For the merge cascade, here's what happens after PR #1 goes in. GitHub automatically retargets PR #2 to `main` once `feature-1` is merged and its branch deleted. Whether that retarget produces a clean diff depends entirely on the merge strategy:
+
+- With **squash** or **rebase merge**, `main` gets *new* commits with new SHAs. `feature-2` still carries the original individual commits from `feature-1`, so git now sees the same changes represented two different ways. The result is a polluted diff and often phantom conflicts. To fix this you rebase `feature-2` onto the updated `main`, which drops the now-redundant commits.
+- With a **merge commit**, `feature-1`'s commits land on `main` with their original SHAs. Since `feature-2` already contains those exact commits in its history, git recognizes them as already-present and the diff stays clean. No rebase strictly needed.
+
+Since squash-merge is the common house style on many teams, the practical loop usually becomes:
+1. merge PR #1
+2. rebase the rest of the stack onto the new `main`
+3. force-push
+4. merge PR #2
+5. repeat.
+
+This is exactly where `git rebase --update-refs` earns its keep — it rebases the whole stack and moves every intermediate branch ref in one operation, so you don't have to rebase and repoint each branch by hand. You'd run it from the tip of the stack against the freshly-updated `main`, then force-push the branches (`--force-with-lease`).
+
+> [!NOTE]
+> Enabling `rebase.updateRefs = true` in your git config makes `--update-refs` the default for every interactive rebase, which is handy when you're living in stacks day to day.
+
 ## Stash subset of staged files
 
 ```bash

@@ -61,6 +61,7 @@ Table of Contents
 - [Stacked branches/PRs workflow](git.md#stacked-branchesprs-workflow)
   - [If it's a new commit rather than an amend](git.md#if-its-a-new-commit-rather-than-an-amend)
   - [If you're editing a commit that already exists in `feature-a`](git.md#if-youre-editing-a-commit-that-already-exists-in-feature-a)
+  - [Workflow](git.md#stacked-prs-workflow)
 - [View file modifications](git.md#view-file-modifications)
 - [View ignored files](git.md#view-ignored-files)
 - `add`
