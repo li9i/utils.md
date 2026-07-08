@@ -556,6 +556,19 @@ git merge --ff-only `my-branch`
 
 ## Stacked branches/PRs workflow
 
+Stacked PRs are for breaking one large change into a sequence of smaller, individually reviewable pieces where each piece depends on the one before it. The defining characteristic is that the branches are based on one another in a cascade, not each targeting main independently.
+
+So the structure looks like:
+
+```
+main
+ └─ feature-1          PR #1: feature-1 → main
+     └─ feature-2      PR #2: feature-2 → feature-1
+         └─ feature-3  PR #3: feature-3 → feature-2
+```
+
+The reason each PR targets its *parent* branch rather than `main` is the diff. If PR #2 targeted `main` directly, GitHub would show it containing all of PR #1's changes too, so the reviewer couldn't tell what's actually new in #2. By targeting the parent, each PR's diff shows only its own incremental changes, which is the whole point of stacking.
+
 > Let's say we have some stacked branches. Let's say that we need to make a change to the first one, how do we propagate it to every other branch?
 
 Propagating a change down the stack just means rebasing the upper branches onto the new tip of the lower one. The thing that makes this painless is `--update-refs`, which moves all the intermediate branch pointers for you in a single rebase instead of you rebasing each branch by hand.
@@ -602,19 +615,6 @@ git push --force-with-lease origin feature-a feature-b feature-c
 ```
 
 ### Stacked PRs Workflow
-
-Stacked PRs are for breaking one large change into a sequence of smaller, individually reviewable pieces where each piece depends on the one before it. The defining characteristic is that the branches are based on one another in a cascade, not each targeting main independently.
-
-So the structure looks like:
-
-```
-main
- └─ feature-1          PR #1: feature-1 → main
-     └─ feature-2      PR #2: feature-2 → feature-1
-         └─ feature-3  PR #3: feature-3 → feature-2
-```
-
-The reason each PR targets its *parent* branch rather than `main` is the diff. If PR #2 targeted `main` directly, GitHub would show it containing all of PR #1's changes too, so the reviewer couldn't tell what's actually new in #2. By targeting the parent, each PR's diff shows only its own incremental changes, which is the whole point of stacking.
 
 On review: the PRs can be reviewed in parallel, since a reviewer can read each incremental diff independently. But they must *merge* bottom-up — you can't merge #2 before #1, because #2's base branch doesn't exist in `main` yet.
 
