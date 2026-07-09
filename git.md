@@ -1,35 +1,4 @@
-# A
-
-## Add everything except untracked files
-
-If you need to `add` everything except untracked files, i.e. only update changes to files that are already tracked
-
-```bash
-git add -u # --update
-```
-
----
-
-# C
-
-## Checkout as means of cherry-picking file from another branch
-
-The following copies a file that originally resides to branch `master` to the `my-branch` branch.
-
-```bash
-# git checkout master  # on branch master
-git checkout -b my-branch
-git checkout master -- <filename>
-```
-
-## Checkout as means of restoring file to past state using commit hash
-
-```bash
-git checkout <commit-hash> -- <filename>
-```
-
-> [!NOTE]
-> If you don't supply `commit-hash` then the file is restored to its last committed state.
+# Setup
 
 ## Configuration of keys for different repos
 
@@ -56,6 +25,54 @@ Host github.com
   IdentityFile ~/.ssh/id_ed25519_iti581_github
   IdentitiesOnly yes
 ```
+
+---
+
+# `add`
+
+## Add everything except untracked files
+
+If you need to `add` everything except untracked files, i.e. only update changes to files that are already tracked
+
+```bash
+git add -u # --update
+```
+
+## Forgot to add file(s) to latest commit and realised before pushing?
+
+Don't worry. You can add the file(s) to the latest commit with
+
+```bash
+git add <forgotten-files>
+git commit --amend
+```
+
+---
+
+# `checkout`
+
+## Checkout as means of cherry-picking file from another branch
+
+The following copies a file that originally resides to branch `master` to the `my-branch` branch.
+
+```bash
+# git checkout master  # on branch master
+git checkout -b my-branch
+git checkout master -- <filename>
+```
+
+## Checkout as means of restoring file to past state using commit hash
+
+```bash
+git checkout <commit-hash> -- <filename>
+```
+
+> [!NOTE]
+> If you don't supply `commit-hash` then the file is restored to its staged version in the index. That matches the last commit only when the file has no staged changes.
+
+---
+
+# `cherry-pick`
 
 ## `cherry-pick` a commit
 
@@ -96,22 +113,12 @@ If the patch doesn't apply cleanly, you can try `git am -3` (three-way merge) or
 
 ---
 
-# D
+# `diff`
 
 ## `diff` different files across different branches
 
 ```bash
 git diff main:src/file_a.txt feature:src/folder/file_b.txt
-```
-
----
-
-# F
-
-## Fetch by specifying key location
-
-```bash
-GIT_SSH_COMMAND='ssh -i /path/to/private_key' git fetch origin
 ```
 
 ## Find files changed between commits filtered by regex
@@ -142,21 +149,22 @@ git diff HEAD -S KeyError --name-only
 Search for a regex with `-G` instead
 
 ```bash
-git diff HEAD -G KeyError* --name-only
-```
-
-## Forgot to add file(s) to latest commit and realised before pushing?
-
-Don't worry. You can add the file(s) to the latest commit with
-
-```bash
-git add <forgotten-files>
-git commit --amend
+git diff HEAD -G 'KeyError' --name-only
 ```
 
 ---
 
-# H
+# `fetch`
+
+## Fetch by specifying key location
+
+```bash
+GIT_SSH_COMMAND='ssh -i /path/to/private_key' git fetch origin
+```
+
+---
+
+# Hooks (`pre-commit`)
 
 ## Hooks
 
@@ -176,7 +184,7 @@ pre-commit run -a
 
 ---
 
-# L
+# `lfs`
 
 ## LFS
 
@@ -204,24 +212,11 @@ git lfs migrate import --include="*.bin,*.zip" --everything
 
 1. Delete files
 2. Commit
-3. `bash git lfs prune`
-
-## List files modified or yet untracked
-
-```bash
-git status --porcelain | awk '{print $2}'
-```
-
-If you add the following to `~/.gitconfig` then issuing `git changed-files` will constitute an abbreviation
-
-```gitignore
-[alias]
-    changed-files = "!git status --porcelain | awk '{print $2}'"
-```
+3. `git lfs prune`
 
 ---
 
-# M
+# `merge`
 
 ## Merge branch but don't commit changes yet
 
@@ -249,33 +244,27 @@ git reset
 
 Then you may keep the files that you need and discard the rest.
 
-## Modify commit message
+## Resolve conflicts after merge
 
-Assume you want to modify the message or the description of commit `<commit-sha>`. Use
-
-```bash
-git rebase -i <commit-sha>~1
-```
-
-and mark the commit you want to change with `reword` or `r`. Close the editor; a new editor with the commit message and description will open.
-
-## Modify commit content
-
-Assume you want to modify the content of commit `<commit-sha>`. Use
+>[!NOTE]
+> You might want to have meld configured as your `difftool` as well as your `mergetool`
+> ```
+> git config --global merge.tool meld
+> ```
 
 ```bash
-git rebase -i <commit-sha>~1
+git mergetool <conflicted-file>
 ```
+Meld will open with three panes: your branch's version on the left, the other branch's version on the right, and the merge result in the middle. Edit the middle pane, save, and close meld. Git will then mark the file as resolved and ask whether to keep the backup .orig file. After that, finish the merge with:
 
-and mark the commit you want to change with `edit` or `e`. Close the editor. Then modify the files you want. Then
-
-1. `git add <modified-files>`
-2. git commit --amend
-3. git rebase --continue
+```bash
+git add <conflicted-file>   # usually automatic after mergetool, but check git status
+git commit
+```
 
 ---
 
-# P
+# `push`
 
 ## Push by specifying key location
 
@@ -289,7 +278,7 @@ GIT_SSH_COMMAND='ssh -i /path/to/private_key' git push origin main
 
 ---
 
-# R
+# `rebase`
 
 ## Rebase and automatically accept changes from branch
 
@@ -317,7 +306,7 @@ git checkout --theirs -- .
 
 ### Long story
 
-It is possible to resolve `rebase` conflicts automatically by favouring the changes from branch `b` (the branch being rebased) over those from `master` (the base branch, the branch onto which `b` is rebased). However, Git doesn’t do this by default; you need to explicitly instruct it. During a `rebase` with conflicts, Git pauses and asks you to resolve them. If you want to automatically accept all changes from branch `b` (i.e., `ours` in the context of a `rebase`) you can use:
+It is possible to resolve `rebase` conflicts automatically by favouring the changes from branch `b` (the branch being rebased) over those from `master` (the base branch, the branch onto which `b` is rebased). However, Git doesn’t do this by default; you need to explicitly instruct it. During a `rebase` with conflicts, Git pauses and asks you to resolve them. If you want to automatically accept all changes from branch `b` (i.e., `theirs` in the context of a `rebase`) you can use:
 
 ```bash
 git checkout --theirs -- .
@@ -352,6 +341,33 @@ This tells Git to automatically prefer the changes from branch `b` (the `theirs`
 > [!CAUTION]
 > Automatically discarding changes from `master` may unintentionally remove important updates.
 
+## Modify commit message
+
+Assume you want to modify the message or the description of commit `<commit-sha>`. Use
+
+```bash
+git rebase -i <commit-sha>~1
+```
+
+and mark the commit you want to change with `reword` or `r`. Close the editor; a new editor with the commit message and description will open.
+
+## Modify commit content
+
+Assume you want to modify the content of commit `<commit-sha>`. Use
+
+```bash
+git rebase -i <commit-sha>~1
+```
+
+and mark the commit you want to change with `edit` or `e`. Close the editor. Then modify the files you want. Then
+
+1. `git add <modified-files>`
+2. git commit --amend
+3. git rebase --continue
+
+---
+
+# `reflog`
 
 ## Reflog
 
@@ -391,15 +407,13 @@ git reset --hard HEAD@{1}
 
 ### Recover from a botched rebase
 
-[#recover-from-a-botched-rebase](#recover-from-a-botched-rebase)
-
-Every rebase brackets its work with rebase (start) and rebase (finish) entries. To throw away a bad rebase, reset to the state immediately before its rebase (start) — which, since the reflog prints newest-first, is the rebase (finish) (or checkout) entry just below it in the log.
+Every rebase brackets its work with `rebase (start)` and `rebase (finish)` entries. To throw away a bad rebase, reset to whatever HEAD pointed at immediately before its `rebase (start)`. Since the reflog prints newest-first, that is the entry directly below the `rebase (start)` line. It holds the pre-rebase state and can be any kind of move: a `commit`, a `checkout`, or the `rebase (finish)` of an earlier rebase.
 
 ```bash
 git reflog
 # ...
-# 8d662d24 HEAD@{5}: rebase (start): checkout HEAD~3                      <- the bad rebase begins here
-# 48e8a195 HEAD@{6}: rebase (finish): returning to refs/heads/feature-x   <- clean pre-rebase state (just below the start)
+# 8d662d24 HEAD@{5}: rebase (start): checkout HEAD~3    <- the bad rebase begins here
+# 48e8a195 HEAD@{6}: commit: add input validation      <- HEAD just before the rebase; reset here
 # ...
 git reset --hard 48e8a195
 ```
@@ -427,6 +441,31 @@ git diff main@{1} main      # what changed on main in its last move (e.g. after 
 > [!NOTE]
 > Reflog entries expire: reachable-commit entries after 90 days (`gc.reflogExpire`), unreachable ones after 30 (`gc.reflogExpireUnreachable`). It rescues recent mistakes, not one from last quarter. It also tracks only committed history—uncommitted changes destroyed by `reset --hard` are genuinely gone (that is what `git stash` is for).
 
+---
+
+# `reset`
+
+## Take back last commit but keep changes unstaged for further processing
+
+> (commits) `A` <-- `B`. How to go back to A but keep B's changes as unstaged?
+
+Surprisingly simple:
+
+```bash
+git reset HEAD~1
+```
+
+Use `--force-with-lease` if B was pushed.
+
+## Unstage everything after `add`
+
+```bash
+git reset
+```
+
+---
+
+# `revert`
 
 ## Remove changes introduced by commit
 
@@ -450,24 +489,6 @@ Locate the commit you want to remove in the editor. Then change the word `pick` 
 git rebase --continue
 ```
 
-## Resolve conflicts after merge
-
->[!NOTE]
-> You might want to have meld configured as your `difftool` as well as your `mergetool`
-> ```
-> git config --global merge.tool meld
-> ```
-
-```bash
-git mergetool <conflicted-file>
-```
-Meld will open with three panes: your branch's version on the left, the other branch's version on the right, and the merge result in the middle. Edit the middle pane, save, and close meld. Git will then mark the file as resolved and ask whether to keep the backup .orig file. After that, finish the merge with:
-
-```bash
-git add <conflicted-file>   # usually automatic after mergetool, but check git status
-git commit
-```
-
 ## Revert multiple commits in one commit
 
 ### Commits are sequential
@@ -489,7 +510,7 @@ git commit -m "Revert specific commits"
 
 ---
 
-# S
+# `squash`
 
 ## Squash one branch to a single commit; then place it in a branch
 
@@ -499,7 +520,7 @@ Suppose that in a github repository there are two branches, branch B and branch 
 git checkout C
 
 # This "teleports" the files from branch B into the current working directory and automatically stages them, but it does not bring over the commit history.
-git checkout B
+git checkout B -- .
 ```
 
 If not all files from branch B should be copied but only those under a specific directory, then you may achieve it like so:
@@ -531,7 +552,7 @@ git reset --soft <start-commit-hash-1>
 git commit -m "Squashed sequence from branch B"
 ```
 
-Now follow [Squash a sequence of commits to a single commit; then place it in a branch](#squash-one-branch-to-a-single-commit-then-place-it-in-a-branch), where the new branch B is `temp-slice`
+Now follow [Squash one branch to a single commit; then place it in a branch](#squash-one-branch-to-a-single-commit-then-place-it-in-a-branch), where the new branch B is `temp-slice`
 
 ## Squash local commits before pushing
 
@@ -596,12 +617,7 @@ git merge --squash my-branch
 git commit -m "Squashed all changes from my-branch"
 ```
 
-You can now replace `my-branch` with `my-branch-squashed`
-
-```bash
-# On my-branch-squashed still
-git rebase master
-```
+`my-branch-squashed` now sits on top of `master` as a single commit, so no rebase is needed. Use it in place of `my-branch`.
 
 If you prefer to rewrite history then do an interactive rebase on `my-branch` first:
 
@@ -627,8 +643,96 @@ Git will then prompt you to edit the commit message for the squashed commit. Fin
 
 ```bash
 git checkout master
-git merge --ff-only `my-branch`
+git merge --ff-only my-branch
 ```
+
+---
+
+# `stash`
+
+## Stash a subset of files by path
+
+```bash
+git stash push path/to/file1 path/to/file2
+```
+
+---
+
+# `worktree`
+
+## Worktrees
+
+> You are in the middle of working and your boss comes in and demands that you fix something immediately. You might typically use `git stash` to store your changes away temporarily, however, you don’t want to risk disturbing any of it. Instead, you create a temporary linked worktree to make the emergency fix, remove it when done, and then resume your work.
+
+```
+git worktree add -b emergency-fix ../temp master
+pushd ../temp
+# ... hack hack hack ...
+git commit -a -m 'emergency fix'
+popd
+git worktree remove ../temp
+```
+
+> source: https://git-scm.com/docs/git-worktree#_examples
+
+---
+
+# Inspecting state
+
+## List files modified or yet untracked
+
+```bash
+git status --porcelain | cut -c4-
+```
+
+> [!NOTE]
+> The path starts at column 4, so `cut -c4-` reads it in full. A path containing spaces or special characters is shown double-quoted, e.g. `"my file.txt"`. A rename appears as `old -> new` on a single line.
+
+If you add the following to `~/.gitconfig` then issuing `git changed-files` will constitute an abbreviation
+
+```ini
+[alias]
+    changed-files = "!git status --porcelain | cut -c4-"
+```
+
+## View file modifications
+
+### Introduced in specific commit
+
+```bash
+git show <commit-hash> -- <file>
+```
+
+### Introduced by all affecting commits
+
+```bash
+git log -p --follow <file>
+
+# List commits only
+# git log --follow <file>
+```
+
+### When file is only staged
+
+```bash
+git difftool --cached <file>
+```
+
+### Side by side in command line
+
+```bash
+git diff --word-diff
+```
+
+## View ignored files
+
+```bash
+git ls-files --others --ignored --exclude-standard
+```
+
+---
+
+# Workflows
 
 ## Stacked branches/PRs workflow
 
@@ -710,93 +814,3 @@ This is exactly where `git rebase --update-refs` earns its keep — it rebases t
 
 > [!NOTE]
 > Enabling `rebase.updateRefs = true` in your git config makes `--update-refs` the default for every interactive rebase, which is handy when you're living in stacks day to day.
-
-## Stash subset of staged files
-
-```bash
-git stash push path/to/file1 path/to/file2
-```
-
----
-
-# T
-
-## Take back last commit but keep changes unstaged for further processing
-
-> (commits) `A` <-- `B`. How to go back to A but keep B's changes as unstaged?
-
-Surprisingly simple:
-
-```bash
-git reset HEAD~1
-```
-
-Use `--force-with-lease` if B was pushed.
-
----
-
-# U
-
-## Unstage everything after `add`
-
-```bash
-git reset
-```
-
----
-
-# V
-
-## View file modifications
-
-### Introduced in specific commit
-
-```bash
-git show <commit-hash> -- <file>
-```
-
-### Introduced by all affecting commits
-
-```bash
-git log -p --follow <file>
-
-# List commits only
-# git log --follow <file>
-```
-
-### When file is only staged
-
-```bash
-git difftool --cached <file>
-```
-
-### Side by side in command line
-
-```bash
-git diff --word-diff
-```
-
-## View ignored files
-
-```bash
-git ls-files --others --ignored --exclude-standard
-```
-
----
-
-# W
-
-## Worktrees
-
-> You are in the middle of working and your boss comes in and demands that you fix something immediately. You might typically use `git stash` to store your changes away temporarily, however, you don’t want to risk disturbing any of it. Instead, you create a temporary linked worktree to make the emergency fix, remove it when done, and then resume your work.
-
-```
-git worktree add -b emergency-fix ../temp master
-pushd ../temp
-# ... hack hack hack ...
-git commit -a -m 'emergency fix'
-popd
-git worktree remove ../temp
-```
-
-> source: https://git-scm.com/docs/git-worktree#_examples

@@ -4,11 +4,13 @@ Table of Contents
 * [`apt`](#apt)
 * [Audio](#audio)
 * [Between two computers](#between-two-computers)
+* [Claude](#claude)
 * [`docker`](#docker)
 * [General](#general)
 * [`git`](#git)
 * [ROS 2](#ros-2)
 * [Search](#search)
+* [Shell](#shell)
 * [`vim`](#vim)
 * [YouTube](#youtube)
 
@@ -53,72 +55,76 @@ Table of Contents
 
 ## [`git`](git.md)
 
-- [Configuration of keys for different repos](git.md#configuration-of-keys-for-different-repos)
-- [Install or run pre-commit hooks](git.md#pre-commit)
-- [List files modified or yet untracked](git.md#list-files-modified-or-yet-untracked)
-- [Remove changes introduced by commit](git.md#remove-changes-introduced-by-commit)
-- [Resolve conflicts after merge](git.md#resolve-conflicts-after-merge)
-- [Revert multiple commits in one new commit](git.md#revert-multiple-commits-in-one-commit)
-- [Stacked branches/PRs workflow](git.md#stacked-branchesprs-workflow)
-  - [If it's a new commit rather than an amend](git.md#if-its-a-new-commit-rather-than-an-amend)
-  - [If you're editing a commit that already exists in `feature-a`](git.md#if-youre-editing-a-commit-that-already-exists-in-feature-a)
-  - [Workflow](git.md#stacked-prs-workflow)
-- [View file modifications](git.md#view-file-modifications)
-- [View ignored files](git.md#view-ignored-files)
+- **Setup**
+  - [Configuration of keys for different repos](git.md#configuration-of-keys-for-different-repos)
 - `add`
   - [Add everything except untracked files](git.md#add-everything-except-untracked-files)
-  - [Forgot to add file(s) to latest commit and realised before pushing?](git.md#forgot-to-add-files-to-latest-commit-and-realised-before-pushing)
-  - [Unstage everything after `add`](git.md#unstage-everything-after-add)
+  - [Forgot to add file(s) to latest commit before pushing](git.md#forgot-to-add-files-to-latest-commit-and-realised-before-pushing)
 - `checkout`
-  - [Checkout as means of cherry-picking file from another branch](git.md#checkout-as-means-of-cherry-picking-file-from-another-branch)
-  - [Checkout as means of restoring file to past state using commit hash](git.md#checkout-as-means-of-restoring-file-to-past-state-using-commit-hash)
+  - [Cherry-pick a file from another branch](git.md#checkout-as-means-of-cherry-picking-file-from-another-branch)
+  - [Restore file to a past state using commit hash](git.md#checkout-as-means-of-restoring-file-to-past-state-using-commit-hash)
 - `cherry-pick`
   - [The two branches are in the same repository](git.md#the-two-branches-are-in-the-same-repository)
-  - [The two branches are NOT in the same repository](git.md#the-two-branches-are-NOT-in-the-same-repository)
+  - [The two branches are NOT in the same repository](git.md#the-two-branches-are-not-in-the-same-repository)
 - `diff`
-  - [different files across different branches](git.md#diff-different-files-across-different-branches)
-  - [Find files changed between commits filtered by regex](git.md#find-files-changed-between-commits-filtered-by-regex)
-  - [Find unstaged files in which a particular string was modified](git.md#find-unstaged-files-in-which-a-particular-string-was-modified)
+  - [Different files across different branches](git.md#diff-different-files-across-different-branches)
+  - [Files changed between commits filtered by regex](git.md#find-files-changed-between-commits-filtered-by-regex)
+  - [Unstaged files in which a string was modified](git.md#find-unstaged-files-in-which-a-particular-string-was-modified)
 - `fetch`
   - [Fetch by specifying key location](git.md#fetch-by-specifying-key-location)
+- **Hooks (`pre-commit`)**
+  - [Install or run pre-commit hooks](git.md#pre-commit)
+- `lfs`
+  - [Installation](git.md#installation)
+  - [Add stuff to](git.md#add-stuff-to)
+  - [Migrate existing files to LFS](git.md#migrate-existing-files-to-lfs-eg-large-files-already-committed)
+  - [Remove commit-unreferenced stuff from](git.md#remove-commit-unreferenced-stuff-from)
+- `merge`
+  - [Merge branch but don't commit changes yet](git.md#merge-branch-but-dont-commit-changes-yet)
+  - [Resolve conflicts after merge](git.md#resolve-conflicts-after-merge)
 - `push`
   - [Push by specifying key location](git.md#push-by-specifying-key-location)
   - [Force-push but prevent accidental overwrite](git.md#force-push-but-prevent-accidental-overwrite)
 - `rebase`
   - [Rebase and automatically accept changes from branch](git.md#rebase-and-automatically-accept-changes-from-branch)
-- `reflog`
-  - [Undo the last history-changing operation](#undo-the-last-history-changing-operation)
-  - [Recover from a botched rebase](#recover-from-a-botched-rebase)
-  - [Recover a lost commit or a branch deleted with `-D`](#recover-a-lost-commit-or-a-branch-deleted-with--d)
-  - [Inspect what a ref pointed at, at a past state](#inspect-what-a-ref-pointed-at-at-a-past-state)
-- `reset`
-  - [Take back last commit but keep changes unstaged for further processing](git.md#take-back-last-commit-but-keep-changes-unstaged-for-further-processing)
-- `lfs`
-  - [Installation](git.md#installation)
-  - [Add stuff to](git.md#add-stuff-to)
-  - [Migrate existing files to LFS (e.g. large files already committed)](git.md#migrate-existing-files-to-LFS-eg-large-files-already-committed)
-  - [Remove commit-unreferenced stuff from](git.md#remove-commit-unreferenced-stuff-from)
-- modify
   - [Modify commit message](git.md#modify-commit-message)
   - [Modify commit content](git.md#modify-commit-content)
-- `merge`
-  - [Merge branch but don't commit changes yet](git.md#merge-branch-but-dont-commit-changes-yet)
-- squash
-  - [Squash a sequence of commits to a single commit---then place it in a branch](git.md#squash-a-sequence-of-commits-to-a-single-commit-then-place-it-in-a-branch)
+- `reflog`
+  - [Undo the last history-changing operation](git.md#undo-the-last-history-changing-operation)
+  - [Recover from a botched rebase](git.md#recover-from-a-botched-rebase)
+  - [Recover a lost commit or a branch deleted with `-D`](git.md#recover-a-lost-commit-or-a-branch-deleted-with--d)
+  - [Inspect what a ref pointed at, at a past state](git.md#inspect-what-a-ref-pointed-at-at-a-past-state)
+- `reset`
+  - [Take back last commit but keep changes unstaged](git.md#take-back-last-commit-but-keep-changes-unstaged-for-further-processing)
+  - [Unstage everything after `add`](git.md#unstage-everything-after-add)
+- `revert`
+  - [Remove changes introduced by commit](git.md#remove-changes-introduced-by-commit)
+  - [Revert multiple commits in one commit](git.md#revert-multiple-commits-in-one-commit)
+- `squash`
+  - [Squash one branch to a single commit; then place it in a branch](git.md#squash-one-branch-to-a-single-commit-then-place-it-in-a-branch)
+  - [Squash a sequence of commits to a single commit; then place it in a branch](git.md#squash-a-sequence-of-commits-to-a-single-commit-then-place-it-in-a-branch)
+  - [Squash local commits before pushing](git.md#squash-local-commits-before-pushing)
   - [Squash commits during merge](git.md#squash-commits-during-merge)
   - [Squash commits during rebase](git.md#squash-commits-during-rebase)
-  - [Squash local commits before pushing](git.md#squash-local-commits-before-pushing)
-  - [Squash one branch to a single commit---then place it in a branch](git.md#squash-one-branch-to-a-single-commit-then-place-it-in-a-branch)
 - `stash`
-  - [Stash subset of staged files](git.md#stash-subset-of-staged-files)
+  - [Stash a subset of files by path](git.md#stash-a-subset-of-files-by-path)
 - `worktree`
   - [What's a typical workflow?](git.md#worktrees)
+- **Inspecting state**
+  - [List files modified or yet untracked](git.md#list-files-modified-or-yet-untracked)
+  - [View file modifications](git.md#view-file-modifications)
+  - [View ignored files](git.md#view-ignored-files)
+- **Workflows**
+  - [Stacked branches/PRs workflow](git.md#stacked-branchesprs-workflow)
+    - [If it's a new commit rather than an amend](git.md#if-its-a-new-commit-rather-than-an-amend)
+    - [If you're editing a commit that already exists in `feature-a`](git.md#if-youre-editing-a-commit-that-already-exists-in-feature-a)
+    - [Workflow](git.md#stacked-prs-workflow)
 
 ## [ROS 2](ros2.md)
 
 - [Cancel action goal from CLI](ros2.md#cancel-action-goal-from-cli)
 - [`colcon`](ros2.md#colcon)
-- [Migrate signing key](ros2.md@migrate.signing-key)
+- [Migrate signing key](ros2.md#migrate-signing-key)
 - [Publish static transform on the fly](ros2.md#publish-static-transform-on-the-fly)
 - [Release Package via Apt](ros2.md#release-package-via-apt)
 - [Save map published at custom topic](ros2.md#save-map-published-at-custom-topic)
@@ -142,7 +148,7 @@ Table of Contents
 
 - [Delete lines containing a specific pattern](vim.md#delete-lines-containing-a-specific-pattern)
 - [Delete lines NOT containing a specific pattern](vim.md#delete-lines-not-containing-a-specific-pattern)
-- [Enable backup, undo, swap](vim.md#vim-enable-backup-undo-swap)
+- [Enable backup, undo, swap](vim.md#enable-backup-undo-swap)
 - [Replace text and preserve case](vim.md#replace-text-and-preserve-case)
 
 ## [YouTube](youtube.md)
