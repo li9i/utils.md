@@ -85,6 +85,11 @@ Table of Contents
   - [Force-push but prevent accidental overwrite](git.md#force-push-but-prevent-accidental-overwrite)
 - `rebase`
   - [Rebase and automatically accept changes from branch](git.md#rebase-and-automatically-accept-changes-from-branch)
+- `reflog`
+  - [Undo the last history-changing operation](#undo-the-last-history-changing-operation)
+  - [Recover from a botched rebase](#recover-from-a-botched-rebase)
+  - [Recover a lost commit or a branch deleted with `-D`](#recover-a-lost-commit-or-a-branch-deleted-with--d)
+  - [Inspect what a ref pointed at, at a past state](#inspect-what-a-ref-pointed-at-at-a-past-state)
 - `reset`
   - [Take back last commit but keep changes unstaged for further processing](git.md#take-back-last-commit-but-keep-changes-unstaged-for-further-processing)
 - `lfs`

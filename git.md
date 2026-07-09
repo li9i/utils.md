@@ -352,6 +352,82 @@ This tells Git to automatically prefer the changes from branch `b` (the `theirs`
 > [!CAUTION]
 > Automatically discarding changes from `master` may unintentionally remove important updates.
 
+
+## Reflog
+
+The reflog is a per-repository, purely local log of where your refs have *been*. Every time `HEAD` or a branch tip moves—commit, reset, rebase, merge, checkout, cherry-pick, amend—Git records the old SHA, the new SHA, and a one-line note about what caused the move. It is never fetched, pushed, or shared: two people on the same repo have entirely different reflogs, and a fresh `git clone` starts with an empty one.
+
+The mental model: branches and `HEAD` are just pointers to commits, and almost every Git operation is really "move a pointer". The reflog is the append-only history of those moves. So a `reset --hard` never deletes anything—it moves a pointer, and the reflog still holds the SHA it used to point at. That is what makes the operations below recoverable.
+
+Show `HEAD`'s reflog (most operations):
+
+```bash
+git reflog
+```
+
+Show a single branch's reflog (cleaner when tracing one branch):
+
+```bash
+git reflog show <branch>
+```
+
+Reference syntax: `HEAD@{n}` is "n moves ago for `HEAD`"; `<branch>@{n}` is the same per-branch. A time-based form also works when you remember *when* rather than how many operations ago:
+
+```
+git reset --hard HEAD@{2.hours.ago}
+git log main@{yesterday}
+```
+
+### Undo the last history-changing operation
+
+`HEAD@{1}` is almost always wherever you were before the thing you just regretted (a bad `reset`, `rebase`, `merge`, or `commit --amend`).
+
+```bash
+git reset --hard HEAD@{1}
+```
+
+> [!CAUTION]
+> A `reset` itself creates a new reflog entry, so after one undo the old `HEAD@{1}` becomes `HEAD@{2}`. Don't count indices while the list shifts under you—read the reflog, find the SHA of the good state, and reset to the **SHA**, not the `@{n}`.
+
+### Recover from a botched rebase
+
+[#recover-from-a-botched-rebase](#recover-from-a-botched-rebase)
+
+Every rebase brackets its work with rebase (start) and rebase (finish) entries. To throw away a bad rebase, reset to the state immediately before its rebase (start) — which, since the reflog prints newest-first, is the rebase (finish) (or checkout) entry just below it in the log.
+
+```bash
+git reflog
+# ...
+# 8d662d24 HEAD@{5}: rebase (start): checkout HEAD~3                      <- the bad rebase begins here
+# 48e8a195 HEAD@{6}: rebase (finish): returning to refs/heads/feature-x   <- clean pre-rebase state (just below the start)
+# ...
+git reset --hard 48e8a195
+```
+
+Then redo the rebase correctly. This is the safety net that makes aggressive rebasing safe: the pre-rewrite state is always one reflog lookup away.
+
+### Recover a lost commit or a branch deleted with `-D`
+
+A commit orphaned by a rewrite, or a branch deleted with `git branch -D`, isn't gone—it's just unreferenced. Find its SHA in the reflog and point a fresh branch at it.
+
+```
+git reflog                      # or: git log -g (same data, full-log format, greppable)
+git branch recovered <sha>
+```
+
+`git log -g --grep=<text>` is handy for hunting a specific commit message across the reflog.
+
+### Inspect what a ref pointed at, at a past state
+
+```
+git show HEAD@{3}           # the commit HEAD pointed at 3 moves ago
+git diff main@{1} main      # what changed on main in its last move (e.g. after a pull)
+```
+
+> [!NOTE]
+> Reflog entries expire: reachable-commit entries after 90 days (`gc.reflogExpire`), unreachable ones after 30 (`gc.reflogExpireUnreachable`). It rescues recent mistakes, not one from last quarter. It also tracks only committed history—uncommitted changes destroyed by `reset --hard` are genuinely gone (that is what `git stash` is for).
+
+
 ## Remove changes introduced by commit
 
 ### Create a New Commit That Undoes It (`git revert`)
