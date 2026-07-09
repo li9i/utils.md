@@ -34,6 +34,7 @@ Table of Contents
 ## [Claude](claude.md)
 
   -  [Access session from another directory](claude.md#access-session-from-another-directory)
+  -  [Fork session](claude.md#fork-session)
   -  [Move session from one directory to another](claude.md#move-session-from-one-directory-to-another)
 
 ## [Docker](docker.md)

@@ -8,6 +8,16 @@
 
 ---
 
+# F
+
+## Fork session
+
+Resuming a session with `claude --continue` or `claude --resume` reopens it under the same session ID and appends new messages to the existing conversation. Forking with `--fork-session` or `/branch` copies the history into a new session ID, leaving the original unchanged.
+
+> source: https://code.claude.com/docs/en/how-claude-code-works#resume-or-fork-sessions
+
+---
+
 # M
 
 ## Move session from one directory to another
