@@ -413,7 +413,7 @@ Every rebase brackets its work with `rebase (start)` and `rebase (finish)` entri
 git reflog
 # ...
 # 8d662d24 HEAD@{5}: rebase (start): checkout HEAD~3    <- the bad rebase begins here
-# 48e8a195 HEAD@{6}: commit: add input validation      <- HEAD just before the rebase; reset here
+# 48e8a195 HEAD@{6}: commit: add input validation       <- HEAD just before the rebase; reset here
 # ...
 git reset --hard 48e8a195
 ```
