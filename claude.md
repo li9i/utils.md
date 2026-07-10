@@ -27,3 +27,13 @@ Resuming a session with `claude --continue` or `claude --resume` reopens it unde
 > If you just want to reach a session from another directory rather than permanently relocate it, you have lighter options. Inside the picker, `Ctrl+W` widens to all worktrees of the repository and `Ctrl+A` widens to every project on this machine. And selecting a session from another worktree of the same repository resumes it in place, while selecting one from an unrelated project copies a `cd` and resume command to your clipboard instead.
 
 > source: https://code.claude.com/docs/en/sessions
+
+---
+
+# U
+
+## Update
+
+```bash
+sudo npm update -g @anthropic-ai/claude-code
+```
