@@ -37,3 +37,5 @@ Resuming a session with `claude --continue` or `claude --resume` reopens it unde
 ```bash
 sudo npm update -g @anthropic-ai/claude-code
 ```
+
+> source: https://www.getaiperks.com/en/ai/how-to-update-claude-code#method-1-npm-update-recommended:~:text=Method%201%3A%20NPM%20Update%20(Recommended)
