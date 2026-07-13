@@ -90,6 +90,7 @@ Table of Contents
   - [Rebase and automatically accept changes from branch](git.md#rebase-and-automatically-accept-changes-from-branch)
   - [Modify commit message](git.md#modify-commit-message)
   - [Modify commit content](git.md#modify-commit-content)
+  - [`--onto`](git.md#--onto)
 - `reflog`
   - [Undo the last history-changing operation](git.md#undo-the-last-history-changing-operation)
   - [Recover from a botched rebase](git.md#recover-from-a-botched-rebase)

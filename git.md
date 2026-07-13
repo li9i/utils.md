@@ -365,6 +365,43 @@ and mark the commit you want to change with `edit` or `e`. Close the editor. The
 2. git commit --amend
 3. git rebase --continue
 
+
+## `--onto`
+
+`git rebase --onto` lets you replay a specific *range* of commits onto a new base, decoupling "what to move" from "where to put it." Regular rebase always assumes those are the same point; `--onto` splits them.
+
+The form:
+
+```
+git rebase --onto <newbase> <upstream> [<branch>]
+```
+
+Mental model: **take the commits in `<upstream>..<branch>` (upstream exclusive) and plant them on `<newbase>`.**
+
+- `<newbase>` — where the commits land
+- `<upstream>` — the *old* base; commits after this point are what get moved
+- `<branch>` — the tip of the range (defaults to current HEAD, and gets checked out/moved)
+
+Two canonical uses:
+
+**Re-point a branch.** You branched `feature` off `main` but meant to branch it off `develop`:
+
+```
+git rebase --onto develop main feature
+```
+
+Moves everything in `main..feature` onto `develop`.
+
+**Drop a lower branch in a stack.** Say the bottom PR (`feature-a`) squash-merged into `main`, so its commits now exist in a different form. You want `feature-b` re-pointed onto `main` *without* replaying `feature-a`'s originals:
+
+```
+git rebase --onto main feature-a feature-b
+```
+
+This takes only the `feature-a..feature-b` commits and lands them on the updated `main`, cleanly dropping the now-redundant lower commits — the case `--update-refs` alone doesn't handle, since a squash merge breaks the ancestry it relies on.
+
+You can also drop a middle range by pointing `--onto` at the commit just before the bad range and using the last bad commit as `<upstream>`.
+
 ---
 
 # `reflog`
