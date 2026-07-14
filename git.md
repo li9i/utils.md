@@ -779,9 +779,9 @@ So the structure looks like:
 
 ```
 main
- └─ feature-1          PR #1: feature-1 → main
-     └─ feature-2      PR #2: feature-2 → feature-1
-         └─ feature-3  PR #3: feature-3 → feature-2
+ └─ feature-a          PR #1: feature-a → main
+     └─ feature-b      PR #2: feature-b → feature-a
+         └─ feature-c  PR #3: feature-c → feature-b
 ```
 
 The reason each PR targets its *parent* branch rather than `main` is the diff. If PR #2 targeted `main` directly, GitHub would show it containing all of PR #1's changes too, so the reviewer couldn't tell what's actually new in #2. By targeting the parent, each PR's diff shows only its own incremental changes, which is the whole point of stacking.
@@ -835,13 +835,13 @@ git push --force-with-lease origin feature-a feature-b feature-c
 
 On review: the PRs can be reviewed in parallel, since a reviewer can read each incremental diff independently. But they must *merge* bottom-up — you can't merge #2 before #1, because #2's base branch doesn't exist in `main` yet.
 
-For the merge cascade, here's what happens after PR #1 goes in. GitHub automatically retargets PR #2 to `main` once `feature-1` is merged and its branch deleted. Whether that retarget produces a clean diff depends entirely on the merge strategy:
+For the merge cascade, here's what happens after PR #1 goes in. GitHub automatically retargets PR #2 to `main` once `feature-a` is merged and its branch deleted. Whether that retarget produces a clean diff depends entirely on the merge strategy:
 
-- With **squash** or **rebase merge**, `main` gets *new* commits with new SHAs. `feature-2` still carries the original individual commits from `feature-1`, so git now sees the same changes represented two different ways. The result is a polluted diff and often phantom conflicts. To fix this you rebase `feature-2` onto the updated `main` with `--update-refs` but excluding `feature-1` from what is included in the rebase.
+- With **squash** or **rebase merge**, `main` gets *new* commits with new SHAs. `feature-b` still carries the original individual commits from `feature-a`, so git now sees the same changes represented two different ways. The result is a polluted diff and often phantom conflicts. To fix this you rebase `feature-b` onto the updated `main` with `--update-refs` but excluding `feature-a` from what is included in the rebase.
 
   ```bash
   git fetch origin main:main
-  git rebase --onto main feature-1 feature-2 --update-refs
+  git rebase --onto main feature-a feature-b --update-refs
   ```
 
 
@@ -896,7 +896,7 @@ For the merge cascade, here's what happens after PR #1 goes in. GitHub automatic
   The repetition you're fighting is downstream of the squash. If you **rebase-merge or merge-commit the bottom of a stack** instead of squashing it, the lower commits keep their patch-ids, and plain `git rebase --update-refs main` will auto-drop them and restack everything with no `--onto` gymnastics. Reserve squash for the *top* of a stack or for standalone PRs. That's the setting where `--update-refs` delivers the frictionless experience you were expecting.
   </details>
 
-- With a **merge commit**, `feature-1`'s commits land on `main` with their original SHAs. Since `feature-2` already contains those exact commits in its history, git recognizes them as already-present and the diff stays clean. No rebase strictly needed.
+- With a **merge commit**, `feature-a`'s commits land on `main` with their original SHAs. Since `feature-b` already contains those exact commits in its history, git recognizes them as already-present and the diff stays clean. No rebase strictly needed.
 
 Since squash-merge is the common house style on many teams, the practical loop usually becomes:
 1. merge PR #1
