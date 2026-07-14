@@ -771,7 +771,7 @@ git ls-files --others --ignored --exclude-standard
 
 # Workflows
 
-## Stacked branches/PRs workflow
+## Stacked branches/PRs workflow—Editing
 
 Stacked PRs are for breaking one large change into a sequence of smaller, individually reviewable pieces where each piece depends on the one before it. The defining characteristic is that the branches are based on one another in a cascade, not each targeting main independently.
 
@@ -831,13 +831,13 @@ Finally, since you've rewritten history on every branch, push the whole stack wi
 git push --force-with-lease origin feature-a feature-b feature-c
 ```
 
-### Stacked PRs Workflow
+## Stacked branches/PRs workflow—Merging
 
 On review: the PRs can be reviewed in parallel, since a reviewer can read each incremental diff independently. But they must *merge* bottom-up — you can't merge #2 before #1, because #2's base branch doesn't exist in `main` yet.
 
 For the merge cascade, here's what happens after PR #1 goes in. GitHub automatically retargets PR #2 to `main` once `feature-1` is merged and its branch deleted. Whether that retarget produces a clean diff depends entirely on the merge strategy:
 
-- With **squash** or **rebase merge**, `main` gets *new* commits with new SHAs. `feature-2` still carries the original individual commits from `feature-1`, so git now sees the same changes represented two different ways. The result is a polluted diff and often phantom conflicts. To fix this you rebase `feature-2` onto the updated `main`, which drops the now-redundant commits.
+- With **squash** or **rebase merge**, `main` gets *new* commits with new SHAs. `feature-2` still carries the original individual commits from `feature-1`, so git now sees the same changes represented two different ways. The result is a polluted diff and often phantom conflicts. To fix this you rebase `feature-2` onto the updated `main` with `--update-refs`, which drops the now-redundant commits.
 - With a **merge commit**, `feature-1`'s commits land on `main` with their original SHAs. Since `feature-2` already contains those exact commits in its history, git recognizes them as already-present and the diff stays clean. No rebase strictly needed.
 
 Since squash-merge is the common house style on many teams, the practical loop usually becomes:
