@@ -36,7 +36,7 @@ Table of Contents
 ## [Claude](claude.md)
 
   -  [Access session from another directory](claude.md#access-session-from-another-directory)
-  -  [Fork session](claude.md#fork-session)
+  -  [Branch conversation](claude.md#branch-conversation)
   -  [Move session from one directory to another](claude.md#move-session-from-one-directory-to-another)
   -  [Update](claude.md#update)
 

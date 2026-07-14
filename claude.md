@@ -8,13 +8,13 @@
 
 ---
 
-# F
+# B
 
-## Fork session
+## Branch conversation
 
-Resuming a session with `claude --continue` or `claude --resume` reopens it under the same session ID and appends new messages to the existing conversation. Forking with `--fork-session` or `/branch` copies the history into a new session ID, leaving the original unchanged.
+`/branch [name]` creates a branch of the current conversation at the current point, so you can try a different direction without losing the conversation as it stands. It switches you into the new branch and preserves the original. The optional `name` just labels the branch so it's easier to find later. Think of it as a checkpoint-and-fork: everything up to that moment is copied, and you continue from a clean divergence point.
 
-> source: https://code.claude.com/docs/en/how-claude-code-works#resume-or-fork-sessions
+**Moving between branches**: Each branch is a separate session, so you navigate with `/resume`: `/resume [session]` resumes a conversation by ID or name, or opens the session picker. From the terminal before launching, the equivalents are `claude --resume <id>` or `claude -c` for the most recent session.
 
 ---
 
