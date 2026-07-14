@@ -837,12 +837,64 @@ On review: the PRs can be reviewed in parallel, since a reviewer can read each i
 
 For the merge cascade, here's what happens after PR #1 goes in. GitHub automatically retargets PR #2 to `main` once `feature-1` is merged and its branch deleted. Whether that retarget produces a clean diff depends entirely on the merge strategy:
 
-- With **squash** or **rebase merge**, `main` gets *new* commits with new SHAs. `feature-2` still carries the original individual commits from `feature-1`, so git now sees the same changes represented two different ways. The result is a polluted diff and often phantom conflicts. ~~To fix this you rebase `feature-2` onto the updated `main` with `--update-refs`, which drops the now-redundant commits.~~  ~~To fix this merge `main` back onto `feature-2`.~~
+- With **squash** or **rebase merge**, `main` gets *new* commits with new SHAs. `feature-2` still carries the original individual commits from `feature-1`, so git now sees the same changes represented two different ways. The result is a polluted diff and often phantom conflicts. To fix this you rebase `feature-2` onto the updated `main` with `--update-refs` but excluding `feature-1` from what is included in the rebase.
 
   ```bash
   git fetch origin main:main
   git rebase --onto main feature-1 feature-2 --update-refs
   ```
+
+
+
+<details>
+Say the stack was:
+
+```
+main:    A
+feat-1:  A─B─C          (PR1)
+feat-2:  A─B─C─D─E      (PR2)
+```
+
+When PR1 is **squash-merged**, GitHub doesn't put B and C into main. It creates one brand-new commit S whose *content* equals B+C combined:
+
+```
+main:    A─S            (S = squashed B+C, a fresh SHA)
+```
+
+Now `git rebase main` (even with `--update-refs`) tries to replay feat-2's commits B, C, D, E onto S. Rebase *does* have a mechanism to drop commits already present upstream — but it decides that by comparing **patch-ids**. The patch-id of B alone, and of C alone, do not match the patch-id of S (which is B and C *fused into one*). So rebase can't recognize that B and C are already in main. It replays them on top of S, and now feat-2 contains PR1's changes twice — once inside S, once as the replayed B′, C′. That's your bigger diff (and often phantom conflicts).
+
+This is the key point: **squash-merge specifically defeats rebase's auto-drop**, because squashing changes the patch-id. A rebase-merge or a merge commit would have preserved B and C's patch-ids, and plain `git rebase --update-refs main` would have dropped them cleanly. Squash is the villain here, not your workflow.
+
+## Why merging main fixes it
+
+Merge doesn't try to cancel individual patches — it just advances the merge-base. When you merged main into feat-2, S became an ancestor of feat-2's tip, so GitHub now computes the diff against S instead of A. Everything S already contains (B+C) drops out of the comparison automatically, leaving just D, E. It sidesteps the patch-id problem entirely, which is why it worked where the rebase didn't.
+
+## The fix that handles the whole stack at once
+
+You do **not** need to merge main into every branch. The trick is to stop relying on patch-id auto-drop and instead tell rebase explicitly *which commits to drop* by range, using `--onto`:
+
+```
+git fetch origin
+git rebase --onto main feat-1 <tip-branch> --update-refs
+```
+
+Read `--onto main feat-1 <tip>` as: "take every commit in `<tip>` that isn't in `feat-1` (so D, E, F, G…) and replant it on `main`." Because B and C are *at or below* feat-1's tip, they're excluded by definition — no patch-id guessing involved. And `--update-refs` moves feat-2, feat-3, … to their new positions in the same pass. One command, whole stack restacked, no per-branch merging.
+
+So if your stack is feat-2 → feat-3 → feat-4, you check out feat-4 (the tip) and run that one rebase; all three refs move. Then force-push them together:
+
+```
+git push --force-with-lease origin feat-2 feat-3 feat-4
+```
+
+Two caveats:
+
+- `feat-1` in that command must still point at PR1's old tip (commit C). If you've already deleted feat-1, grab C's SHA from `git reflog` or from the (now-merged) PR1 page on GitHub and use the SHA in its place.
+- Fetch first, so your local `main` actually contains S. Rebasing onto a stale main is a common reason the whole thing silently does nothing.
+
+## How to avoid this next time
+
+The repetition you're fighting is downstream of the squash. If you **rebase-merge or merge-commit the bottom of a stack** instead of squashing it, the lower commits keep their patch-ids, and plain `git rebase --update-refs main` will auto-drop them and restack everything with no `--onto` gymnastics. Reserve squash for the *top* of a stack or for standalone PRs. That's the setting where `--update-refs` delivers the frictionless experience you were expecting.
+</details>
 
 - With a **merge commit**, `feature-1`'s commits land on `main` with their original SHAs. Since `feature-2` already contains those exact commits in its history, git recognizes them as already-present and the diff stays clean. No rebase strictly needed.
 
