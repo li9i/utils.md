@@ -117,10 +117,10 @@ Table of Contents
   - [View file modifications](git.md#view-file-modifications)
   - [View ignored files](git.md#view-ignored-files)
 - **Workflows**
-  - [Stacked branches/PRs workflow—Editing](git.md#stacked-branchesprs-workflow-editing)
+  - [Stacked branches/PRs workflow—Editing](git.md#stacked-branchesprs-workflowediting)
     - [If it's a new commit rather than an amend](git.md#if-its-a-new-commit-rather-than-an-amend)
     - [If you're editing a commit that already exists in `feature-a`](git.md#if-youre-editing-a-commit-that-already-exists-in-feature-a)
-    - [Stacked branches/PRs workflow—Merging](git.md#stacked-branchesprs-workflow-merging)
+  - [Stacked branches/PRs workflow—Merging](git.md#stacked-branchesprs-workflowmerging)
 
 ## [ROS 2](ros2.md)
 
