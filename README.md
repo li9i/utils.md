@@ -121,7 +121,8 @@ Table of Contents
   - [Stacked branches/PRs workflow—Editing](git.md#stacked-branchesprs-workflowediting)
     - [If it's a new commit rather than an amend](git.md#if-its-a-new-commit-rather-than-an-amend)
     - [If you're editing a commit that already exists in `feature-a`](git.md#if-youre-editing-a-commit-that-already-exists-in-feature-a)
-  - [Stacked branches/PRs workflow—Merging](git.md#stacked-branchesprs-workflowmerging)
+    - [If you squash commits / reword messages](git.md#if-you-squash-commits--reword-messages)
+  - [Stacked branches/PRs workflow—After `feature-{k}` was approved: what to do next with `feature-{k+1}`](git.md#stacked-branchesprs-workflowafter-feature-k-was-approved-what-to-do-next-with-feature-k1)
 
 ## [ROS 2](ros2.md)
 

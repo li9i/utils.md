@@ -857,7 +857,43 @@ Finally, since you've rewritten history on every branch, push the whole stack wi
 git push --force-with-lease origin feature-a feature-b feature-c
 ```
 
-## Stacked branches/PRs workflow—Merging
+### If you squash commits / reword messages
+
+```bash
+git rebase --onto feature/movex-xyz-src <OLD-src-tip> feature/movex-xyz-test
+```
+
+Three arguments to `git rebase --onto`:
+
+- new base = `feature/movex-xyz-src` — the rewritten tip you want to sit on top of.
+- old base = `<OLD-src-tip>` — the commit that was -src's tip before you squashed/reworded. Everything up to and including this is discarded from the replay.
+- branch = `feature/movex-xyz-test` — what gets replayed.
+
+#### Why plain `git rebase feature/movex-xyz-src feature/movex-xyz-test` fails
+
+That form replays every commit on `-test` that isn't reachable from new `-src`. But the OLD `-src` commits (pre-rewrite) are no longer reachable from new `-src` either, so git tries to replay them too. You get the
+old base commits back as duplicates, plus conflicts. `--onto` is what tells git "cut below this old base, keep only what's above it".
+
+#### Finding the `OLD-src-tip`
+
+History rewrite orphaned it, but `reflog` still holds it:
+
+```bash
+git reflog feature/movex-xyz-src
+```
+
+Look for the entry just before your `squash`/`reword` (commit message will be the pre-squash one). Copy that hash. That is `<OLD-src-tip>`.
+
+#### After
+
+Verify only test commits replayed, no `-src` duplicates:
+
+```bash
+git log --oneline feature/movex-xyz-src..feature/movex-xyz-test
+git range-diff @{u}...HEAD   # optional, compare old vs new test branch
+```
+
+## Stacked branches/PRs workflow—After `feature-{k}` was approved: what to do next with `feature-{k+1}`
 
 On review: the PRs can be reviewed in parallel, since a reviewer can read each incremental diff independently. But they must *merge* bottom-up — you can't merge #2 before #1, because #2's base branch doesn't exist in `main` yet.
 
@@ -869,8 +905,6 @@ For the merge cascade, here's what happens after PR #1 goes in. GitHub automatic
   git fetch origin main:main
   git rebase --onto main feature-a feature-b --update-refs
   ```
-
-
 
   <details>
   Say the stack was:
@@ -891,11 +925,11 @@ For the merge cascade, here's what happens after PR #1 goes in. GitHub automatic
 
   This is the key point: **squash-merge specifically defeats rebase's auto-drop**, because squashing changes the patch-id. A rebase-merge or a merge commit would have preserved B and C's patch-ids, and plain `git rebase --update-refs main` would have dropped them cleanly. Squash is the villain here, not your workflow.
 
-  ## Why merging main fixes it
+  ### Why merging main fixes it
 
   Merge doesn't try to cancel individual patches — it just advances the merge-base. When you merged main into feat-2, S became an ancestor of feat-2's tip, so GitHub now computes the diff against S instead of A. Everything S already contains (B+C) drops out of the comparison automatically, leaving just D, E. It sidesteps the patch-id problem entirely, which is why it worked where the rebase didn't.
 
-  ## The fix that handles the whole stack at once
+  ### The fix that handles the whole stack at once
 
   You do **not** need to merge main into every branch. The trick is to stop relying on patch-id auto-drop and instead tell rebase explicitly *which commits to drop* by range, using `--onto`:
 
@@ -917,7 +951,7 @@ For the merge cascade, here's what happens after PR #1 goes in. GitHub automatic
   - `feat-1` in that command must still point at PR1's old tip (commit C). If you've already deleted feat-1, grab C's SHA from `git reflog` or from the (now-merged) PR1 page on GitHub and use the SHA in its place.
   - Fetch first, so your local `main` actually contains S. Rebasing onto a stale main is a common reason the whole thing silently does nothing.
 
-  ## How to avoid this next time
+  ### How to avoid this next time
 
   The repetition you're fighting is downstream of the squash. If you **rebase-merge or merge-commit the bottom of a stack** instead of squashing it, the lower commits keep their patch-ids, and plain `git rebase --update-refs main` will auto-drop them and restack everything with no `--onto` gymnastics. Reserve squash for the *top* of a stack or for standalone PRs. That's the setting where `--update-refs` delivers the frictionless experience you were expecting.
   </details>
