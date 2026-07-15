@@ -361,10 +361,11 @@ git rebase -i <commit-sha>~1
 
 and mark the commit you want to change with `edit` or `e`. Close the editor. Then modify the files you want. Then
 
-1. `git add <modified-files>`
-2. git commit --amend
-3. git rebase --continue
-
+```bash
+# 1. git add <modified-files>
+# 2. git commit --amend
+# 3. git rebase --continue
+```
 
 ## `--onto`
 
