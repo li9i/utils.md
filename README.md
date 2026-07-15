@@ -104,6 +104,7 @@ Table of Contents
   - [Revert multiple commits in one commit](git.md#revert-multiple-commits-in-one-commit)
 - `squash`
   - [Squash one branch to a single commit; then place it in a branch](git.md#squash-one-branch-to-a-single-commit-then-place-it-in-a-branch)
+  - [Squash a sequence of commits to a single commit](git.md#squash-a-sequence-of-commits-to-a-single-commit)
   - [Squash a sequence of commits to a single commit; then place it in a branch](git.md#squash-a-sequence-of-commits-to-a-single-commit-then-place-it-in-a-branch)
   - [Squash local commits before pushing](git.md#squash-local-commits-before-pushing)
   - [Squash commits during merge](git.md#squash-commits-during-merge)

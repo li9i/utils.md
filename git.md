@@ -568,6 +568,31 @@ git checkout C
 git checkout B -- path/to/directory
 ```
 
+## Squash a sequence of commits to a single commit
+
+Say history is `A-B-C-D-E-F` and you want to squash `C-D-E` into one, with `F` still sitting on top:
+
+```
+git rebase -i C~1     # or: git rebase -i B, or the SHA before C
+```
+
+That opens the todo list oldest-first:
+
+```
+pick C
+squash D      # or: fixup D
+squash E      # or: fixup E
+pick F
+```
+
+`squash`/`fixup` folds a commit into the one *above* it, so you `pick` the earliest of your run and `squash` the rest into it. `F` stays `pick` and just gets replayed on the new squashed base. Use `fixup` instead of `squash` if you want to discard the folded-in commit messages rather than being dropped into an editor to combine them.
+
+>[!NOTE]
+Since you're rewriting `C` onward, every commit after the squash point gets a new SHA — so anything already pushed needs `--force-with-lease`, and if other branches point into that range you'll want `--update-refs` on the rebase to carry them along.
+
+>[!CAUTION]
+One caveat on the `C~1` form: if `C` is a merge commit or the very first commit in the repo, `~1` won't resolve cleanly — use the explicit parent SHA or `--root` in the root-commit case.
+
 ## Squash a sequence of commits to a single commit; then place it in a branch
 
 Suppose that in a github repository there are two branches, branch B and branch C. Branch B has a bunch of commits, a finite sequence of which should be squashed into one commit, and then placed in branch C.
