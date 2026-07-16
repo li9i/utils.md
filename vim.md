@@ -1,4 +1,4 @@
-[.vimrc](https://github.com/li9i/dotfiles/blob/master/.vimrc)
+[.vimrc](https://github.com/li9i/dotfiles/blob/master/vim/dot-vimrc)
 
 # D
 
