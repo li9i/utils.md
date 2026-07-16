@@ -117,12 +117,12 @@ Table of Contents
   - [List files modified or yet untracked](git.md#list-files-modified-or-yet-untracked)
   - [View file modifications](git.md#view-file-modifications)
   - [View ignored files](git.md#view-ignored-files)
-- **Workflows**
-  - [Stacked branches/PRs workflow—Editing](git.md#stacked-branchesprs-workflowediting)
+- **Stacked branches/PRs workflow**
+  - [After `feature-{k}` branch was approved: what to do next with `feature-{k+1}`](git.md#stacked-branchesprs-workflowafter-feature-k-branch-was-approved-what-to-do-next-with-feature-k1)
+  - [Editing](git.md#stacked-branchesprs-workflowediting)
     - [If it's a new commit rather than an amend](git.md#if-its-a-new-commit-rather-than-an-amend)
     - [If you're editing a commit that already exists in `feature-a`](git.md#if-youre-editing-a-commit-that-already-exists-in-feature-a)
     - [If you squash commits / reword messages](git.md#if-you-squash-commits--reword-messages)
-  - [Stacked branches/PRs workflow—After `feature-{k}` was approved: what to do next with `feature-{k+1}`](git.md#stacked-branchesprs-workflowafter-feature-k-was-approved-what-to-do-next-with-feature-k1)
 
 ## [ROS 2](ros2.md)
 
@@ -153,7 +153,7 @@ Table of Contents
 - [Delete lines containing a specific pattern](vim.md#delete-lines-containing-a-specific-pattern)
 - [Delete lines NOT containing a specific pattern](vim.md#delete-lines-not-containing-a-specific-pattern)
 - [Enable backup, undo, swap](vim.md#enable-backup-undo-swap)
-- [Join all lines](vim.md#join-all-lines)
+- [Join all lines](vim.md#)
 - [Replace text and preserve case](vim.md#replace-text-and-preserve-case)
 
 ## [YouTube](youtube.md)
