@@ -47,6 +47,19 @@ set undodir=~/.vim/undo//
 
 ---
 
+# J
+
+## Join all lines
+
+```vim
+:%j    " join all lines, collapsing whitespace to a single space (like normal J).
+:%j!   " join with no space inserted between lines (like gJ).
+ggVGJ  " visually select the whole file, then J to join.
+:5,20j " join a specific range (lines 5–20).
+```
+
+---
+
 # R
 
 ## Replace text and preserve case
