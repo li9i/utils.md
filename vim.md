@@ -51,6 +51,8 @@ set undodir=~/.vim/undo//
 
 ## Join all lines
 
+We can do this in a number of ways:
+
 ```vim
 :%j    " join all lines, collapsing whitespace to a single space (like normal J).
 :%j!   " join with no space inserted between lines (like gJ).
