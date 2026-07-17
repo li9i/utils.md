@@ -853,10 +853,10 @@ For the merge cascade, here's what happens after PR #1 goes in. GitHub automatic
   git push --force-with-lease origin feat-2 feat-3 feat-4
   ```
 
-  > [!CAUTION]
-  >  Two caveats:
-  >  - `feat-1` in that command must still point at PR1's old tip (commit C). If you've already deleted feat-1, grab C's SHA from `git reflog` or from the (now-merged) PR1 page on GitHub and use the SHA in its place.
-  >  - Fetch first, so your local `main` actually contains S. Rebasing onto a stale main is a common reason the whole thing silently does nothing.
+> [!CAUTION]
+>  Two caveats:
+>  - `feat-1` in that command must still point at PR1's old tip (commit C). If you've already deleted feat-1, grab C's SHA from `git reflog` or from the (now-merged) PR1 page on GitHub and use the SHA in its place.
+>  - Fetch first, so your local `main` actually contains S. Rebasing onto a stale main is a common reason the whole thing silently does nothing.
 
   ### How to avoid this next time
 
