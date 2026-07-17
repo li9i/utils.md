@@ -811,6 +811,9 @@ For the merge cascade, here's what happens after PR #1 goes in. GitHub automatic
   ```
 
   <details>
+
+  ---
+
   Say the stack was:
 
   ```
@@ -858,6 +861,9 @@ For the merge cascade, here's what happens after PR #1 goes in. GitHub automatic
   ### How to avoid this next time
 
   The repetition you're fighting is downstream of the squash. If you **rebase-merge or merge-commit the bottom of a stack** instead of squashing it, the lower commits keep their patch-ids, and plain `git rebase --update-refs main` will auto-drop them and restack everything with no `--onto` gymnastics. Reserve squash for the *top* of a stack or for standalone PRs. That's the setting where `--update-refs` delivers the frictionless experience you were expecting.
+
+  ---
+
   </details>
 
 - With a **merge commit**, `feature-a`'s commits land on `main` with their original SHAs. Since `feature-b` already contains those exact commits in its history, git recognizes them as already-present and the diff stays clean. No rebase strictly needed.
