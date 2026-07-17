@@ -118,7 +118,7 @@ Table of Contents
   - [View file modifications](git.md#view-file-modifications)
   - [View ignored files](git.md#view-ignored-files)
 - **Stacked branches/PRs workflow**
-  - [After `feature-{k}` branch was approved: what to do next with `feature-{k+1}`](git.md#stacked-branchesprs-workflowafter-feature-k-branch-was-approved-what-to-do-next-with-feature-k1)
+  - [After `feature-{k}` branch was approved: what to do next with `feature-{k+1}`](git.md#after-feature-k-branch-was-approved-what-to-do-next-with-feature-k1)
   - [Editing](git.md#stacked-branchesprs-workflowediting)
     - [If it's a new commit rather than an amend](git.md#if-its-a-new-commit-rather-than-an-amend)
     - [If you're editing a commit that already exists in `feature-a`](git.md#if-youre-editing-a-commit-that-already-exists-in-feature-a)
