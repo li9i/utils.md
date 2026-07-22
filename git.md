@@ -262,6 +262,24 @@ git add <conflicted-file>   # usually automatic after mergetool, but check git s
 git commit
 ```
 
+## What is `merge-base` ?
+
+`git merge-base` finds the best common ancestor of two (or more) commits — the commit where the branches diverged. Given two branches, it walks back through history and reports the most recent commit reachable from both.
+
+```
+git merge-base main feature
+```
+
+This prints the SHA of that shared ancestor.
+
+Why it matters: it's the reference point for three-way merges. When you merge `feature` into `main`, git compares both tips against their merge base to work out what actually changed on each side (rather than treating every differing line as a conflict). Same idea underlies `git diff main...feature` (three-dot), which shows what `feature` changed *since it branched off*, using the merge base as the left side — as opposed to `main..feature` (two-dot), which diffs the raw tips.
+
+A few useful flags:
+
+- `git merge-base --is-ancestor A B` — exits 0 if A is an ancestor of B. Handy in scripts to check "has this branch been merged / is it behind."
+- `git merge-base --fork-point main feature` — uses the reflog to find where `feature` actually forked, which can differ from the plain merge base after history has been rewritten upstream. This is essentially what `git rebase` uses to decide which commits are "yours" versus "already upstream."
+- `git merge-base --octopus A B C` — the common ancestor of more than two commits.
+
 ---
 
 # `push`

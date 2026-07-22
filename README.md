@@ -83,6 +83,7 @@ Table of Contents
 - `merge`
   - [Merge branch but don't commit changes yet](git.md#merge-branch-but-dont-commit-changes-yet)
   - [Resolve conflicts after merge](git.md#resolve-conflicts-after-merge)
+  - [What is `merge-base`?](git.md#what-is-merge-base-)
 - `push`
   - [Push by specifying key location](git.md#push-by-specifying-key-location)
   - [Force-push but prevent accidental overwrite](git.md#force-push-but-prevent-accidental-overwrite)
