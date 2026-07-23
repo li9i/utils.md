@@ -70,6 +70,9 @@ Table of Contents
 - `diff`
   - [Different files across different branches](git.md#diff-different-files-across-different-branches)
   - [Files changed between commits filtered by regex](git.md#find-files-changed-between-commits-filtered-by-regex)
+  - [See stats of lines and files changed between any two branches](git.md#see-stats-of-lines-and-files-changed-between-any-two-branches)
+      - [Compare the current state](git.md#compare-the-current-state)
+      - [Compare asymetrically](git.md#compare-asymetrically)
   - [Unstaged files in which a string was modified](git.md#find-unstaged-files-in-which-a-particular-string-was-modified)
 - `fetch`
   - [Fetch by specifying key location](git.md#fetch-by-specifying-key-location)

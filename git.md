@@ -138,6 +138,30 @@ files=$(git diff --name-only $commit_sha1 $commit_sha2 -- '**/*.yaml')
 for file in $files; do git difftool $commit_sha1 $commit_sha2 -- "$file"; done
 ```
 
+
+## See stats of lines and files changed between any two branches
+
+### Compare the current state (the tips of the branches)
+
+```bash
+git diff --stat <branch-1> <branch-2>
+```
+
+> [!INFO]
+> The order matters: it shows what you would need to do to <branch-1> to make it look like <branch-2>
+
+> [!INFO]
+> This is identical to `git diff --stat <branch-1>..<branch-2>`
+
+### Compare asymmetrically
+
+This is usually what people actually want when comparing a feature branch to a main branch. It finds the common ancestor (where <branch-2> split off from <branch-1>) and only shows the changes introduced in <branch-2> since that split. It ignores any new commits that were added to <branch-1> in the meantime.
+
+```bash
+# Note the three dots
+git diff --stat <branch-1>...<branch-2>
+```
+
 ## Find unstaged files in which a particular string was modified
 
 Say string `KeyError` was modified in a bunch of files that you haven't yet committed. Find these files with
