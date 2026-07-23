@@ -240,6 +240,19 @@ git lfs migrate import --include="*.bin,*.zip" --everything
 
 ---
 
+# `log`
+
+## Trace the origin of a piece of text
+
+```bash
+git log -S "<exact text>" -- <filename>
+```
+
+> [!NOTE]
+> Tip: Adding `-p` (e.g. in this way: `git log -S "..." -p -- <filename>`) shows the diff for each commit, making it easy to spot the exact green + line addition.
+
+---
+
 # `merge`
 
 ## Merge branch but don't commit changes yet

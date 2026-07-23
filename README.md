@@ -83,6 +83,8 @@ Table of Contents
   - [Add stuff to](git.md#add-stuff-to)
   - [Migrate existing files to LFS](git.md#migrate-existing-files-to-lfs-eg-large-files-already-committed)
   - [Remove commit-unreferenced stuff from](git.md#remove-commit-unreferenced-stuff-from)
+- `log`
+  - [Trace the origin of a piece of text](git.md#trace-the-origin-of-a-piece-of-text)
 - `merge`
   - [Merge branch but don't commit changes yet](git.md#merge-branch-but-dont-commit-changes-yet)
   - [Resolve conflicts after merge](git.md#resolve-conflicts-after-merge)
